@@ -1,0 +1,14 @@
+{
+  "name": "travellingo-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "api/webhook.js",
+  "scripts": {
+    "start": "node api/webhook.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@line/bot-sdk": "^9.2.0",
+    "googleapis": "^144.0.0"
+  }
+}
