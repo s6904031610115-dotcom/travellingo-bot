@@ -80,7 +80,6 @@ async function runAllLanguageTests() {
       let isLangMatch = false;
       let durationSec = '0.00';
       let unclearCount = 0;
-      let note = '';
 
       try {
         const buffer = fs.readFileSync(filePath);
@@ -95,9 +94,15 @@ async function runAllLanguageTests() {
         const items = Array.isArray(result?.items) ? result.items : [];
         wordCount = items.length;
 
-        // 3. ตรวจสอบว่าภาษาตรงกันหรือไม่
+        // 3. ตรวจสอบว่าภาษาตรงกันหรือไม่ (รองรับตัวแปรภาษาจีน zh-TW / zh-CN / zh-Hant / zh)
         const detectedLang = String(result?.detected_lang || '').toLowerCase();
-        isLangMatch = detectedLang === langCode.toLowerCase() || result?.languageMismatch === false;
+        const targetLang = langCode.toLowerCase();
+
+        isLangMatch = 
+          detectedLang === targetLang || 
+          result?.languageMismatch === false ||
+          (targetLang === 'zh-tw' && ['zh', 'zh-tw', 'zh-hant'].includes(detectedLang)) ||
+          (targetLang === 'zh' && ['zh', 'zh-cn', 'zh-hans'].includes(detectedLang));
 
         // 4. ตรวจสอบจำนวนข้อความอ่านไม่ชัด (unclear)
         const unclear = result?.unclear || result?.unclear_text || '';
